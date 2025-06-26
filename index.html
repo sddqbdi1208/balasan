@@ -2,79 +2,37 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>balasan</title>
+  <title>Test Kirim</title>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <style>
-    body {
-      font-family: sans-serif;
-      background: #f0fdf4;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
-    form {
-      background: white;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 100%;
-      max-width: 400px;
-    }
-    input, textarea, button {
-      width: 100%;
-      padding: 10px;
-      margin-top: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      font-size: 1rem;
-    }
-    button {
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      margin-top: 15px;
-    }
-    .status {
-      text-align: center;
-      margin-top: 10px;
-      font-size: 0.9rem;
-    }
-  </style>
 </head>
 <body>
+  <form id="testForm">
+    <input type="text" name="user_name" placeholder="Nama Anda" required />
+    <textarea name="message" placeholder="Pesan Anda" required></textarea>
+    <button type="submit">Kirim</button>
+    <p id="status"></p>
+  </form>
 
-<form id="contact-form" name="contact-form" method="POST">
-  <h2>Kirim Pesan</h2>
-  <input type="text" name="user_name" placeholder="Nama Anda" required />
-  <textarea name="message" placeholder="Tulis pesan..." required rows="5"></textarea>
-  <button type="submit">Kirim</button>
-  <div class="status" id="statusMsg"></div>
-</form>
+  <script>
+    emailjs.init("LzdchlBtDYpF8ag7o"); // public key kamu
 
-<script>
-  (function() {
-    emailjs.init("LzdchlBtDYpF8ag7o"); // public key
-  })();
+    document.getElementById('testForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const status = document.getElementById('status');
+      status.innerText = 'Mengirim...';
 
-  document.getElementById('contact-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const statusMsg = document.getElementById("statusMsg");
-    statusMsg.textContent = "⏳ Mengirim...";
+      emailjs.sendForm('service_47w4kdk', 'template_40uxr1i', this)
+        .then(() => {
+          status.innerText = '✅ Berhasil dikirim!';
+          status.style.color = 'green';
+        }, (error) => {
+          status.innerText = '❌ Gagal kirim.';
+          status.style.color = 'red';
+          console.error('EmailJS Error:', error);
+        });
 
-    emailjs.sendForm('service_47w4kdk', 'template_40uxr1i', this)
-      .then(function() {
-        statusMsg.textContent = "✅ Pesan berhasil dikirim!";
-        statusMsg.style.color = "green";
-      }, function(error) {
-        statusMsg.textContent = "❌ Gagal mengirim pesan.";
-        statusMsg.style.color = "red";
-        console.error("EmailJS Error:", error);
-      });
-
-    this.reset();
-  });
-</script>
-
+      this.reset();
+    });
+  </script>
 </body>
 </html>
