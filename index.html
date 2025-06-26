@@ -2,94 +2,74 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Kirim Pesan ke Email</title>
+  <title>balasan</title>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: sans-serif;
       background: #f0fdf4;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      margin: 0;
     }
-
     form {
       background: white;
       padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
       width: 100%;
       max-width: 400px;
     }
-
-    h2 {
-      margin-top: 0;
-      text-align: center;
-      color: #2e7d32;
-    }
-
-    input, textarea {
+    input, textarea, button {
       width: 100%;
-      margin: 8px 0;
       padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 1rem;
-    }
-
-    button {
-      width: 100%;
-      background: #4caf50;
-      color: white;
-      padding: 10px;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    button:hover {
-      background: #43a047;
-    }
-
-    .status {
       margin-top: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 1rem;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      margin-top: 15px;
+    }
+    .status {
       text-align: center;
+      margin-top: 10px;
       font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
 
-<form id="contact-form">
+<form id="contact-form" name="contact-form" method="POST">
   <h2>Kirim Pesan</h2>
   <input type="text" name="user_name" placeholder="Nama Anda" required />
-  <textarea name="message" placeholder="Tulis pesan di sini..." rows="5" required></textarea>
+  <textarea name="message" placeholder="Tulis pesan..." required rows="5"></textarea>
   <button type="submit">Kirim</button>
   <div class="status" id="statusMsg"></div>
 </form>
 
 <script>
   (function() {
-    emailjs.init("LzdchlBtDYpF8ag7o"); // Public key kamu
+    emailjs.init("LzdchlBtDYpF8ag7o"); // public key
   })();
 
   document.getElementById('contact-form').addEventListener('submit', function(e) {
     e.preventDefault();
-
     const statusMsg = document.getElementById("statusMsg");
     statusMsg.textContent = "⏳ Mengirim...";
 
     emailjs.sendForm('service_47w4kdk', 'template_40uxr1i', this)
-      .then(function(response) {
-         statusMsg.textContent = "✅ Pesan berhasil dikirim!";
-         statusMsg.style.color = "green";
+      .then(function() {
+        statusMsg.textContent = "✅ Pesan berhasil dikirim!";
+        statusMsg.style.color = "green";
       }, function(error) {
-         statusMsg.textContent = "❌ Gagal mengirim pesan. Silakan coba lagi.";
-         statusMsg.style.color = "red";
+        statusMsg.textContent = "❌ Gagal mengirim pesan.";
+        statusMsg.style.color = "red";
+        console.error("EmailJS Error:", error);
       });
 
     this.reset();
